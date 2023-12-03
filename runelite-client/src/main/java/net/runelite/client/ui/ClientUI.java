@@ -248,6 +248,7 @@ public class ClientUI
 				}
 			});
 
+
 			if (inTitle)
 			{
 				titleToolbar.addComponent(event.getButton(), button);

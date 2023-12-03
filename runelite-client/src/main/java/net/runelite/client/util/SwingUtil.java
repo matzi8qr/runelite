@@ -24,21 +24,11 @@
  */
 package net.runelite.client.util;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.SecondaryLoop;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Enumeration;
 import java.util.function.BiConsumer;
@@ -222,7 +212,15 @@ public class SwingUtil
 			? ImageUtil.resizeImage(navigationButton.getIcon(), iconSize, iconSize)
 			: navigationButton.getIcon();
 
-		final JButton button = new JButton();
+		final JButton button = new JButton(){
+			public Point getToolTipLocation(MouseEvent e) {
+				AffineTransform affinetransform = new AffineTransform();
+				FontRenderContext frc = new FontRenderContext(affinetransform,true,true);
+				Font font = this.getFont();
+				int offset = (int)(font.getStringBounds(this.getToolTipText(), frc).getWidth());
+				return new Point(-offset, 0); //shift the tooltip to the right
+			}
+		};
 		button.setSize(scaledImage.getWidth(), scaledImage.getHeight());
 		button.setToolTipText(navigationButton.getTooltip());
 		button.setIcon(new ImageIcon(scaledImage));

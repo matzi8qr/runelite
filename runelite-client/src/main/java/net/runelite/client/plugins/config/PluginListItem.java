@@ -37,14 +37,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JToggleButton;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import lombok.Getter;
 import net.runelite.client.ui.ColorScheme;
@@ -108,7 +101,7 @@ class PluginListItem extends JPanel implements SearchablePlugin
 		setPreferredSize(new Dimension(PluginPanel.PANEL_WIDTH, 20));
 
 		JLabel nameLabel = new JLabel(pluginConfig.getName());
-		nameLabel.setForeground(Color.WHITE);
+		nameLabel.setForeground(Color.CYAN);
 
 		if (!pluginConfig.getDescription().isEmpty())
 		{
@@ -226,6 +219,7 @@ class PluginListItem extends JPanel implements SearchablePlugin
 	{
 		final JPopupMenu menu = new JPopupMenu();
 		final Color labelForeground = label.getForeground();
+
 		menu.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		for (final JMenuItem menuItem : menuItems)
@@ -241,6 +235,7 @@ class PluginListItem extends JPanel implements SearchablePlugin
 			menu.add(menuItem);
 		}
 
+		int tooltipTimeout = ToolTipManager.sharedInstance().getInitialDelay();
 		label.addMouseListener(new MouseAdapter()
 		{
 			private Color lastForeground;
@@ -257,6 +252,7 @@ class PluginListItem extends JPanel implements SearchablePlugin
 			@Override
 			public void mouseEntered(MouseEvent mouseEvent)
 			{
+				ToolTipManager.sharedInstance().setDismissDelay(1000*3600);
 				lastForeground = label.getForeground();
 				label.setForeground(ColorScheme.BRAND_ORANGE);
 			}
@@ -264,6 +260,7 @@ class PluginListItem extends JPanel implements SearchablePlugin
 			@Override
 			public void mouseExited(MouseEvent mouseEvent)
 			{
+				ToolTipManager.sharedInstance().setDismissDelay(tooltipTimeout);
 				label.setForeground(lastForeground);
 			}
 		});
